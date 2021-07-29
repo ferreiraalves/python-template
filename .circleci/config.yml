@@ -1,0 +1,33 @@
+# -------
+# Anchors
+# -------
+
+# Configs that go after job name
+base_config: &base_config
+  docker:
+  - image: circleci/python:3.6
+  working_directory: ~/samba-encoder
+
+
+# ----------------------
+# CircleCI configuration
+# ----------------------
+version: 2
+jobs:
+  set_workspace:
+    <<: *base_config
+    steps:
+    - checkout
+    - persist_to_workspace:
+        root: .
+        paths: .
+
+workflows:
+  version: 2
+  prod-pipeline:
+    jobs:
+      - set_workspace:
+          filters:
+            branches:
+              only:
+                - master
